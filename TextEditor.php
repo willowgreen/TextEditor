@@ -85,7 +85,6 @@ if (SIGNED_IN) {
             <input type="submit" value="create" />
         </form>
         <?php
-	}
 }
 if (!SIGNED_IN) {
 ?>
