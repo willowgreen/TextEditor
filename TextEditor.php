@@ -1,5 +1,5 @@
 <?php
-define('_VERSION', 0x00000001);
+define('_VERSION', 0x00000002);
 define('FILE_ACCESS', $_GET['FILE_ACCESS'] ?? false);
 define('FILE_CUSTOM', $_POST['FILE_CUSTOM'] ?? false);
 define('FILE_DELETE', isset($_GET['FILE_DELETE']));
@@ -16,25 +16,10 @@ define('FILE_VALID', array_diff(scandir('.') , array(
 define('FILE_WRITE', $_GET['FILE_WRITE'] ?? false);
 define('PASSWORD', 'DEFINE_PASSWORD_HERE');
 define('SIGNED_IN', isset($_COOKIE['PASSWORD']) && $_COOKIE['PASSWORD'] == PASSWORD);
-?>
-<html lang="en">
-<head>
-    <title>Textr<?php
-if (!SIGNED_IN) echo (' | sign in'); ?></title>
-</head>
-<div align="center">
-    <a href="<?= basename(__FILE__); ?>">
-        <h3>Textr</h3>
-    </a>
-</div>
-<br />
-<body>
-    <div align="center">
-        <?php
 if (isset($_POST['PASSWORD'])) {
-	setcookie('PASSWORD', $_POST['PASSWORD'], strtotime('+30 days'));
-	header('LOCATION: ./' . basename(__FILE__));
-	die();
+    setcookie('PASSWORD', $_POST['PASSWORD'], strtotime('+30 days'));
+    header('LOCATION: ./' . basename(__FILE__));
+    die();
 }
 if (SIGNED_IN) {
 	if (FILE_CUSTOM) {
@@ -55,6 +40,24 @@ if (SIGNED_IN) {
 			die();
 		}
 		@fopen(dirname(__FILE__) . DIRECTORY_SEPARATOR . htmlspecialchars_decode(FILE_ACCESS) , 'x');
+	}
+}
+?>
+<html lang="en">
+<head>
+    <title>Textr<?php
+if (!SIGNED_IN) echo (' | sign in'); ?></title>
+</head>
+<div align="center">
+    <a href="<?= basename(__FILE__); ?>">
+        <h3>Textr</h3>
+    </a>
+</div>
+<br />
+<body>
+    <div align="center">
+        <?php
+if (SIGNED_IN) {
 		echo ('<form action="' . basename(__FILE__) . '?FILE_ACCESS=' . FILE_ACCESS . '&FILE_FINISH" method="post">');
 ?>
         <textarea style="height: 75%; width: 100%;" name="CONTENTS" wrap="soft"><?= file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . htmlspecialchars_decode(FILE_ACCESS)); ?></textarea>
@@ -107,7 +110,7 @@ if (!SIGNED_IN) {
 <br />
 <footer>
     <div align="center">
-        TextEditor <?= _VERSION; ?> by <a href="https://willowgreengroup.com.au/">Willowgreen Group</a>
+        TextEditor <?= _VERSION; ?> &mdash; Made with ❤️ by <a href="https://willowgreen.io/opensource">Willowgreen</a>
     </div>
 </footer>
 </html>
